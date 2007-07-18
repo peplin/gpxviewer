@@ -7,6 +7,7 @@
 //	revision 1 - Initial implementation
 //	revision 2 - Removed LoadGPXFileIntoGoogleMap and made it the callers
 //				 responsibility.  Added more options (colour, width, delta).
+//	revision 3 - Waypoint parsing now compatible with Firefox.
 //
 // Author: Kaz Okuda
 // URI: http://notions.okuda.ca/geotagging/projects-im-working-on/gpx-viewer/
@@ -62,7 +63,10 @@ GPXParser.prototype.CreateMarker = function(point)
 
 	if (point.getElementsByTagName("html").length > 0)
 	{
-		html = point.getElementsByTagName("html").item(0).xml;
+		for (i=0; i<point.getElementsByTagName("html").item(0).childNodes.length; i++)
+		{
+			html += point.getElementsByTagName("html").item(0).childNodes[i].nodeValue;
+		}
 	}
 	else
 	{
@@ -72,7 +76,7 @@ GPXParser.prototype.CreateMarker = function(point)
 		var attrlen = attributes.length;
 		for (i=0; i<attrlen; i++)
 		{
-			html += attributes.item(0).name + " = " + attributes.item(i).text + "<br>";
+			html += attributes.item(i).name + " = " + attributes.item(i).nodeValue + "<br>";
 		}
 
 		if (point.hasChildNodes)
@@ -81,7 +85,9 @@ GPXParser.prototype.CreateMarker = function(point)
 			var childrenlen = children.length;
 			for (i=0; i<childrenlen; i++)
 			{
-				html += children.item(i).nodeName + " = " + children.item(i).text + "<br>";
+				// Ignore empty nodes
+				if (children[i].nodeType != 1) continue;
+				html += children[i].nodeName + " = " + children[i].firstChild.nodeValue + "<br>";
 			}
 		}
 	}
