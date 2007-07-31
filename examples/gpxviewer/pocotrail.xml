@@ -6,7 +6,7 @@
     <name>Photo 1</name>
     <extensions><html><![CDATA[
        <a href="http://okuda.blogspot.com/2005/07/traboulay-poco-trail.html" target="_blank">
-         <img src="images/IMG_2366-01.jpg" />
+         <img src="images/IMG_2366-01.jpg" width="200" height="133" />
        </a>
     ]]></html></extensions>
   </wpt>
@@ -15,7 +15,7 @@
     <name>Photo 2</name>
     <extensions><html><![CDATA[
        <a href="http://okuda.blogspot.com/2005/07/traboulay-poco-trail.html" target="_blank">
-         <img src="images/IMG_2370-01.jpg" />
+         <img src="images/IMG_2370-01.jpg" width="200" height="133" />
        </a>
     ]]></html></extensions>
   </wpt>
@@ -24,7 +24,7 @@
     <name>Photo 3</name>
     <extensions><html><![CDATA[
        <a href="http://okuda.blogspot.com/2005/07/traboulay-poco-trail.html" target="_blank">
-         <img src="images/IMG_2377-01.jpg" />
+         <img src="images/IMG_2377-01.jpg" width="200" height="300" />
        </a>
     ]]></html></extensions>
   </wpt>
@@ -33,7 +33,7 @@
     <name>Photo 4</name>
     <extensions><html><![CDATA[
        <a href="http://okuda.blogspot.com/2005/07/traboulay-poco-trail.html" target="_blank">
-         <img src="images/IMG_2382-01.jpg" />
+         <img src="images/IMG_2382-01.jpg" width="200" height="300" />
        </a>
     ]]></html></extensions>
   </wpt>
@@ -42,7 +42,7 @@
     <name>Photo 5</name>
     <extensions><html><![CDATA[
        <a href="http://okuda.blogspot.com/2005/07/traboulay-poco-trail.html" target="_blank">
-         <img src="images/IMG_2401-01.jpg" />
+         <img src="images/IMG_2401-01.jpg" width=200 height=133 />
        </a>
     ]]></html></extensions>
   </wpt>
