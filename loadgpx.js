@@ -114,6 +114,7 @@ GPXParser.prototype.CreateMarker = function(point)
 			{
 				// Ignore empty nodes
 				if (children[i].nodeType != 1) continue;
+				if (children[i].firstChild == null) continue;
 				html += children[i].nodeName + " = " + children[i].firstChild.nodeValue + "<br>";
 			}
 		}
@@ -237,7 +238,7 @@ GPXParser.prototype.CenterAndZoom = function (trackSegment, maptype)
 		}
 	}
 
-	if ( (minlat == maxlat) && (minlat = 0) )
+	if ( (minlat == maxlat) && (minlat == 0) )
 	{
 		this.map.setCenter(new GLatLng(49.327667, -122.942333), 14);
 		return;
