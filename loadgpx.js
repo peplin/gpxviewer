@@ -120,26 +120,26 @@ GPXParser.prototype.CreateMarker = function(point)
 		}
 	}
 
-	var marker = new GMarker(new GLatLng(lat,lon));
-	GEvent.addListener(marker, "click",
+	var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat,lon),
+        map: this.map
+    });
+	google.maps.Event.addListener(marker, "click",
 		function()
 		{
 			marker.openInfoWindowHtml(html);
 		}
 	);
 
-	this.map.addOverlay(marker);
-
-
 	// All methods that add items to the map return the bounding box of what they added.
-	//var latlng = new GLatLng(lat,lon);
-	//return new GLatLngBounds(latlng,latlng);
+	//var latlng = new google.maps.LatLng(lat,lon);
+	//return new google.maps.LatLngBounds(latlng,latlng);
 }
 
 
 GPXParser.prototype.AddTrackSegmentToMap = function(trackSegment, colour, width)
 {
-	//var latlngbounds = new GLatLngBounds();
+	//var latlngbounds = new google.maps.LatLngBounds();
 
 	var trackpoints = trackSegment.getElementsByTagName("trkpt");
 	if (trackpoints.length == 0)
@@ -152,7 +152,7 @@ GPXParser.prototype.AddTrackSegmentToMap = function(trackSegment, colour, width)
 	// process first point
 	var lastlon = parseFloat(trackpoints[0].getAttribute("lon"));
 	var lastlat = parseFloat(trackpoints[0].getAttribute("lat"));
-	var latlng = new GLatLng(lastlat,lastlon);
+	var latlng = new google.maps.LatLng(lastlat,lastlon);
 	pointarray.push(latlng);
 	//latlngbounds.extend(latlng);
 
@@ -171,16 +171,19 @@ GPXParser.prototype.AddTrackSegmentToMap = function(trackSegment, colour, width)
 		{
 			lastlon = lon;
 			lastlat = lat;
-			latlng = new GLatLng(lat,lon);
+			latlng = new google.maps.LatLng(lat,lon);
 			pointarray.push(latlng);
 			//latlngbounds.extend(latlng);
 		}
 
 	}
 
-	var polyline = new GPolyline(pointarray, colour, width);
-
-	this.map.addOverlay(polyline);
+	var polyline = new google.maps.Polyline({
+        path: pointarray,
+        strokeColor: colour,
+        strokeWidth: width,
+        map: this.map
+    });
 
 	// All methods that add items to the map return the bounding box of what they added.
 	//return latlngbounds;
@@ -189,7 +192,7 @@ GPXParser.prototype.AddTrackSegmentToMap = function(trackSegment, colour, width)
 GPXParser.prototype.AddTrackToMap = function(track, colour, width)
 {
 	var segments = track.getElementsByTagName("trkseg");
-	//var latlngbounds = new GLatLngBounds();
+	//var latlngbounds = new google.maps.LatLngBounds();
 	for (var i=0; i < segments.length; i++)
 	{
 		var segmentlatlngbounds = this.AddTrackSegmentToMap(segments[i], colour, width);
@@ -202,7 +205,7 @@ GPXParser.prototype.AddTrackToMap = function(track, colour, width)
 	//return latlngbounds;
 }
 
-GPXParser.prototype.CenterAndZoom = function (trackSegment, maptype)
+GPXParser.prototype.CenterAndZoom = function (trackSegment)
 {
 
 	var pointlist = new Array("trkpt", "wpt");
@@ -240,7 +243,7 @@ GPXParser.prototype.CenterAndZoom = function (trackSegment, maptype)
 
 	if ( (minlat == maxlat) && (minlat == 0) )
 	{
-		this.map.setCenter(new GLatLng(49.327667, -122.942333), 14);
+		this.map.setCenter(new google.maps.LatLng(49.327667, -122.942333), 14);
 		return;
 	}
 
@@ -248,14 +251,16 @@ GPXParser.prototype.CenterAndZoom = function (trackSegment, maptype)
 	var centerlon = (maxlon + minlon) / 2;
 	var centerlat = (maxlat + minlat) / 2;
 
-	var bounds = new GLatLngBounds(new GLatLng(minlat, minlon), new GLatLng(maxlat, maxlon));
-
-	this.map.setCenter(new GLatLng(centerlat, centerlon), this.map.getBoundsZoomLevel(bounds), maptype);
+	var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(minlat, minlon),
+            new google.maps.LatLng(maxlat, maxlon));
+	this.map.setCenter(new google.maps.LatLng(centerlat, centerlon));
+    this.map.fitBounds(bounds);
 }
 
 GPXParser.prototype.CenterAndZoomToLatLngBounds = function (latlngboundsarray)
 {
-	var boundingbox = new GLatLngBounds();
+	var boundingbox = new google.maps.LatLngBounds();
 	for (var i=0; i<latlngboundsarray.length; i++)
 	{
 		if (!latlngboundsarray[i].isEmpty())
@@ -267,14 +272,14 @@ GPXParser.prototype.CenterAndZoomToLatLngBounds = function (latlngboundsarray)
 
 	var centerlat = (boundingbox.getNorthEast().lat() + boundingbox.getSouthWest().lat()) / 2;
 	var centerlng = (boundingbox.getNorthEast().lng() + boundingbox.getSouthWest().lng()) / 2;
-	this.map.setCenter(new GLatLng(centerlat, centerlng), this.map.getBoundsZoomLevel(boundingbox));
+	this.map.setCenter(new google.maps.LatLng(centerlat, centerlng), this.map.getBoundsZoomLevel(boundingbox));
 }
 
 
 GPXParser.prototype.AddTrackpointsToMap = function ()
 {
 	var tracks = this.xmlDoc.documentElement.getElementsByTagName("trk");
-	//var latlngbounds = new GLatLngBounds();
+	//var latlngbounds = new google.maps.LatLngBounds();
 
 	for (var i=0; i < tracks.length; i++)
 	{
@@ -291,7 +296,7 @@ GPXParser.prototype.AddTrackpointsToMap = function ()
 GPXParser.prototype.AddWaypointsToMap = function ()
 {
 	var waypoints = this.xmlDoc.documentElement.getElementsByTagName("wpt");
-	//var latlngbounds = new GLatLngBounds();
+	//var latlngbounds = new google.maps.LatLngBounds();
 
 	for (var i=0; i < waypoints.length; i++)
 	{
