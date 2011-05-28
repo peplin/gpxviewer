@@ -36,8 +36,14 @@
 //               I have left the bounding box calculations commented out in case
 //               they might come in handy in the future.
 //
+//    5/28/2010 - Upgraded to Google Maps API v3 and refactored the file a bit.
+//                          (Chris Peplin)
+//
 // Author: Kaz Okuda
 // URI: http://notions.okuda.ca/geotagging/projects-im-working-on/gpx-viewer/
+//
+// Updated for Google Maps API v3 by Chris Peplin
+// Fork moved to GitHub: https://github.com/peplin/gpxviewer
 //
 ///////////////////////////////////////////////////////////////////////////////
 
