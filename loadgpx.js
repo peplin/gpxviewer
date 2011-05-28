@@ -119,12 +119,15 @@ GPXParser.prototype.createMarker = function(point) {
         position: new google.maps.LatLng(lat,lon),
         map: this.map
     });
-    google.maps.Event.addListener(marker, "click",
-        function()
-        {
-            marker.openInfoWindowHtml(html);
-        }
-    );
+
+    var infowindow = new google.maps.InfoWindow({
+        content: html,
+        size: new google.maps.Size(50,50)
+    });
+
+    google.maps.event.addListener(marker, "click", function() {
+        infowindow.open(this.map, marker);
+    });
 }
 
 GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
