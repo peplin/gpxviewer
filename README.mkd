@@ -1,0 +1,90 @@
+gpxviewer
+==========
+
+This original version of this project is hosted on Google Code at
+http://code.google.com/p/gpxviewer/.
+
+This fork adds support for version 3 of the Google Maps API, and the coding
+style of the library has been changed a bit for clarity. From the Google Code
+page:
+
+The GPX viewer is a 100% client-side JavaScript GPX file viewer that uses
+Google Maps to map waypoints and tracklogs.
+
+GPX files are a standard GPS data format that is supported by many software
+applications. It is an XML based data format which lends itself nicely to being
+parsed in JavaScript.
+
+Since it is written entirely in JavaScript, this script can be added to any web
+page with minimal effort and little or no server code. Just copy a GPX file to
+your web site, make a web page with an embedded Google Map, include the script,
+and initialize it.
+
+This script is meant to be customized to some extent. The default formatting
+for Waypoints is to show the available GPS data, but since it is Javascript,
+you can easily customize it to suite your needs.
+
+
+## Usage
+
+Load the Google Maps JavaScript API v3, preferably at the end of the `<body>` of
+your document. (See Google's
+[documentation](http://code.google.com/apis/maps/documentation/javascript/)
+if you need help.)
+
+        <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js">
+        </script>
+
+Make sure your page has a `<div>` to place the map, like this:
+
+    <div id="map" style="width: 100%; height: 100%;"></div>
+
+Next you need to pass your GPX data to the `GPXParser` object - a quick way to
+do this is to perform an AJAX request using jQuery to retreive a GPX file hosted
+on the same web server as the map page.
+
+(Note that you can't load a file from another server due to the
+[same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy).)
+
+You can grab jQuery from Google as well:
+
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+Once these pieces are in place, loading JavaScript like this
+[example](https://github.com/peplin/gpxviewer/blob/next/examples/gpxviewer/gpxviewer.html)
+should do the trick:
+
+    function loadGPXFileIntoGoogleMap(map, filename) {
+        $.ajax({url: filename,
+            dataType: "xml",
+            success: function(data) {
+              var parser = new GPXParser(data, map);
+              parser.setTrackColour("#ff0000");     // Set the track line colour
+              parser.setTrackWidth(5);          // Set the track line width
+              parser.setMinTrackPointDelta(0.001);      // Set the minimum distance between track points
+              parser.centerAndZoom(data);
+              parser.addTrackpointsToMap();         // Add the trackpoints
+              parser.addWaypointsToMap();           // Add the waypoints
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var mapOptions = {
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"),
+            mapOptions);
+        loadGPXFileIntoGoogleMap(map, "pocotrail.xml");
+    });
+
+
+## Acknowledgements
+
+Thanks to [Kaz Okuda](http://notions.okuda.ca/) for the original version of this
+library.
+
+The [blog post](http://notions.okuda.ca/geotagging/projects-im-working-on/gpx-viewer/)
+describing the original version.
