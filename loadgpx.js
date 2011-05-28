@@ -117,22 +117,14 @@ GPXParser.prototype.createMarker = function(point) {
 	);
 
 	this.map.addOverlay(marker);
-
-
-    // All methods that add items to the map return the bounding box of what
-    // they added.
-	//var latlng = new GLatLng(lat,lon);
-	//return new GLatLngBounds(latlng,latlng);
 }
 
 
 GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
         width) {
-	//var latlngbounds = new GLatLngBounds();
-
 	var trackpoints = trackSegment.getElementsByTagName("trkpt");
 	if(trackpoints.length == 0) {
-		return; //latlngbounds;
+		return;
 	}
 
 	var pointarray = [];
@@ -142,10 +134,6 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
 	var lastlat = parseFloat(trackpoints[0].getAttribute("lat"));
 	var latlng = new GLatLng(lastlat,lastlon);
 	pointarray.push(latlng);
-	//latlngbounds.extend(latlng);
-
-	// Create a marker at the begining of each track segment
-	//this.createMarker(trackpoints[0]);
 
 	for(var i = 1; i < trackpoints.length; i++) {
 		var lon = parseFloat(trackpoints[i].getAttribute("lon"));
@@ -160,7 +148,6 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
 			lastlat = lat;
 			latlng = new GLatLng(lat,lon);
 			pointarray.push(latlng);
-			//latlngbounds.extend(latlng);
 		}
 
 	}
@@ -168,24 +155,14 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
 	var polyline = new GPolyline(pointarray, colour, width);
 
 	this.map.addOverlay(polyline);
-
-	// All methods that add items to the map return the bounding box of what they added.
-	//return latlngbounds;
 }
 
 GPXParser.prototype.addTrackToMap = function(track, colour, width) {
 	var segments = track.getElementsByTagName("trkseg");
-	//var latlngbounds = new GLatLngBounds();
 	for(var i = 0; i < segments.length; i++) {
 		var segmentlatlngbounds = this.addTrackSegmentToMap(segments[i], colour,
                 width);
-		//this.addTrackSegmentToMap(segments[i], colour, width);
-		//latlngbounds.extend(segmentlatlngbounds.getSouthWest());
-		//latlngbounds.extend(segmentlatlngbounds.getNorthEast());
 	}
-
-	// All methods that add items to the map return the bounding box of what they added.
-	//return latlngbounds;
 }
 
 GPXParser.prototype.centerAndZoom = function(trackSegment, maptype) {
@@ -256,30 +233,16 @@ GPXParser.prototype.centerAndZoomToLatLngBounds = function(latlngboundsarray) {
 
 GPXParser.prototype.addTrackpointsToMap = function() {
 	var tracks = this.xmlDoc.documentElement.getElementsByTagName("trk");
-	//var latlngbounds = new GLatLngBounds();
 
 	for(var i = 0; i < tracks.length; i++) {
 		this.addTrackToMap(tracks[i], this.trackcolour, this.trackwidth);
-		//var tracklatlngbounds = this.addTrackToMap(tracks[i], this.trackcolour, this.trackwidth);
-		//latlngbounds.extend(tracklatlngbounds.getSouthWest());
-		//latlngbounds.extend(tracklatlngbounds.getNorthEast());
 	}
-
-	// All methods that add items to the map return the bounding box of what they added.
-	//return latlngbounds;
 }
 
 GPXParser.prototype.addWaypointsToMap = function() {
 	var waypoints = this.xmlDoc.documentElement.getElementsByTagName("wpt");
-	//var latlngbounds = new GLatLngBounds();
 
 	for(var i = 0; i < waypoints.length; i++) {
 		this.createMarker(waypoints[i]);
-		//var waypointlatlngbounds = this.createMarker(waypoints[i]);
-		//latlngbounds.extend(waypointlatlngbounds.getSouthWest());
-		//latlngbounds.extend(waypointlatlngbounds.getNorthEast());
 	}
-
-	// All methods that add items to the map return the bounding box of what they added.
-	//return latlngbounds;
 }
