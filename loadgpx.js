@@ -165,7 +165,7 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
     var polyline = new google.maps.Polyline({
         path: pointarray,
         strokeColor: colour,
-        strokeWidth: width,
+        strokeWeight: width,
         map: this.map
     });
 }
