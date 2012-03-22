@@ -88,3 +88,7 @@ library.
 
 The [blog post](http://notions.okuda.ca/geotagging/projects-im-working-on/gpx-viewer/)
 describing the original version.
+
+## License
+
+This project is licensed under the GNU GPL v3 license.
