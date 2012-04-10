@@ -213,7 +213,6 @@ GPXParser.prototype.centerAndZoom = function(trackSegment) {
 
     if((minlat == maxlat) && (minlat == 0)) {
         this.map.setCenter(new google.maps.LatLng(49.327667, -122.942333), 14);
-        this.map.setCenter(new GLatLng(49.327667, -122.942333), 14);
         return;
     }
 
@@ -241,7 +240,7 @@ GPXParser.prototype.centerAndZoomToLatLngBounds = function(latlngboundsarray) {
             boundingbox.getSouthWest().lat()) / 2;
     var centerlng = (boundingbox.getNorthEast().lng() +
             boundingbox.getSouthWest().lng()) / 2;
-    this.map.setCenter(new GLatLng(centerlat, centerlng),
+    this.map.setCenter(new google.maps.LatLng(centerlat, centerlng),
             this.map.getBoundsZoomLevel(boundingbox));
 }
 
