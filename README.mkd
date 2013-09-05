@@ -32,9 +32,7 @@ your document. (See Google's
 [documentation](http://code.google.com/apis/maps/documentation/javascript/)
 if you need help.)
 
-        <script type="text/javascript"
-            src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js">
-        </script>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 Make sure your page has a `<div>` to place the map, like this:
 
@@ -49,7 +47,9 @@ on the same web server as the map page.
 
 You can grab jQuery from Google as well:
 
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript"
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js">
+    </script>
 
 Once these pieces are in place, loading JavaScript like this
 [example](https://github.com/peplin/gpxviewer/blob/next/examples/gpxviewer/gpxviewer.html)
