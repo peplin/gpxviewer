@@ -78,6 +78,9 @@ GPXParser.prototype.translateName = function(name) {
     else if(name == "trkpt") {
         return "Track Point";
     }
+    else if(name == "rtept") {
+        return "Route Point";
+    }
 }
 
 
@@ -178,9 +181,48 @@ GPXParser.prototype.addTrackToMap = function(track, colour, width) {
     }
 }
 
+GPXParser.prototype.addRouteToMap = function(route, colour, width) {
+    var routepoints = route.getElementsByTagName("rtept");
+    if(routepoints.length == 0) {
+        return;
+    }
+
+    var pointarray = [];
+
+    // process first point
+    var lastlon = parseFloat(routepoints[0].getAttribute("lon"));
+    var lastlat = parseFloat(routepoints[0].getAttribute("lat"));
+    var latlng = new google.maps.LatLng(lastlat,lastlon);
+    pointarray.push(latlng);
+
+    for(var i = 1; i < routepoints.length; i++) {
+        var lon = parseFloat(routepoints[i].getAttribute("lon"));
+        var lat = parseFloat(routepoints[i].getAttribute("lat"));
+
+        // Verify that this is far enough away from the last point to be used.
+        var latdiff = lat - lastlat;
+        var londiff = lon - lastlon;
+        if(Math.sqrt(latdiff*latdiff + londiff*londiff)
+                > this.mintrackpointdelta) {
+            lastlon = lon;
+            lastlat = lat;
+            latlng = new google.maps.LatLng(lat,lon);
+            pointarray.push(latlng);
+        }
+
+    }
+
+    var polyline = new google.maps.Polyline({
+        path: pointarray,
+        strokeColor: colour,
+        strokeWeight: width,
+        map: this.map
+    });
+}
+
 GPXParser.prototype.centerAndZoom = function(trackSegment) {
 
-    var pointlist = new Array("trkpt", "wpt");
+    var pointlist = new Array("trkpt", "rtept", "wpt");
     var minlat = 0;
     var maxlat = 0;
     var minlon = 0;
@@ -255,5 +297,12 @@ GPXParser.prototype.addWaypointsToMap = function() {
     var waypoints = this.xmlDoc.documentElement.getElementsByTagName("wpt");
     for(var i = 0; i < waypoints.length; i++) {
         this.createMarker(waypoints[i]);
+    }
+}
+
+GPXParser.prototype.addRoutepointsToMap = function() {
+    var routes = this.xmlDoc.documentElement.getElementsByTagName("rte");
+    for(var i = 0; i < routes.length; i++) {
+        this.addRouteToMap(routes[i], this.trackcolour, this.trackwidth);
     }
 }
