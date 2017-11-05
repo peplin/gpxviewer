@@ -131,6 +131,8 @@ GPXParser.prototype.createMarker = function(point) {
     google.maps.event.addListener(marker, "click", function() {
         infowindow.open(this.map, marker);
     });
+    
+    return { marker: marker, infowindow: infowindow };
 }
 
 GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
@@ -171,6 +173,7 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
         strokeWeight: width,
         map: this.map
     });
+    return polyline;
 }
 
 GPXParser.prototype.addTrackToMap = function(track, colour, width) {
