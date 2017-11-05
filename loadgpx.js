@@ -178,10 +178,13 @@ GPXParser.prototype.addTrackSegmentToMap = function(trackSegment, colour,
 
 GPXParser.prototype.addTrackToMap = function(track, colour, width) {
     var segments = track.getElementsByTagName("trkseg");
+    var result = [];
     for(var i = 0; i < segments.length; i++) {
-        var segmentlatlngbounds = this.addTrackSegmentToMap(segments[i], colour,
+        var polyline = this.addTrackSegmentToMap(segments[i], colour,
                 width);
+        result.push(polyline);
     }
+    return result;
 }
 
 GPXParser.prototype.addRouteToMap = function(route, colour, width) {
